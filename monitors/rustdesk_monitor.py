@@ -4,6 +4,7 @@ RustDesk Monitor - Zeigt die RustDesk ID an
 
 import os
 import platform
+import subprocess
 from typing import Optional
 from monitors.base_monitor import BaseMonitor
 
@@ -11,7 +12,7 @@ from monitors.base_monitor import BaseMonitor
 class RustDeskMonitor(BaseMonitor):
     """
     Monitor für RustDesk ID.
-    Unterstützt Windows und Linux Config-Dateien.
+    Verwendet rustdesk.exe --get-id Befehl.
     """
 
     def __init__(self, name: str = "RustDesk ID", icon: str = "🖥️"):
@@ -38,70 +39,84 @@ class RustDeskMonitor(BaseMonitor):
 
     def _get_rustdesk_id_windows(self) -> Optional[str]:
         """
-        Liest RustDesk ID aus Windows Config-Datei.
+        Holt RustDesk ID über rustdesk.exe --get-id Befehl (Windows).
 
         Returns:
             RustDesk ID oder None
         """
         try:
-            # Mögliche Config-Pfade
-            appdata = os.environ.get('APPDATA', '')
-            config_paths = [
-                os.path.join(appdata, 'RustDesk', 'config', 'RustDesk2.toml'),
-                os.path.join(appdata, 'RustDesk', 'config', 'RustDesk.toml'),
+            # Mögliche RustDesk.exe Pfade
+            rustdesk_paths = [
+                r"C:\Program Files\RustDesk\rustdesk.exe",
+                r"C:\Program Files (x86)\RustDesk\rustdesk.exe",
+                os.path.join(os.environ.get('LOCALAPPDATA', ''), 'RustDesk', 'rustdesk.exe'),
+                os.path.join(os.environ.get('PROGRAMFILES', ''), 'RustDesk', 'rustdesk.exe'),
             ]
 
-            for config_path in config_paths:
-                if os.path.exists(config_path):
-                    with open(config_path, 'r', encoding='utf-8') as f:
-                        for line in f:
-                            # Suche nach id = "123456789"
-                            if line.strip().startswith('id'):
-                                parts = line.split('=')
-                                if len(parts) == 2:
-                                    rustdesk_id = parts[1].strip().strip('"').strip("'")
-                                    if rustdesk_id:
-                                        return rustdesk_id
+            # Versuche auch PATH
+            try:
+                result = subprocess.run(
+                    ['rustdesk.exe', '--get-id'],
+                    capture_output=True,
+                    text=True,
+                    timeout=3,
+                    creationflags=subprocess.CREATE_NO_WINDOW if hasattr(subprocess, 'CREATE_NO_WINDOW') else 0
+                )
+                if result.returncode == 0 and result.stdout.strip():
+                    return result.stdout.strip()
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                pass
+
+            # Versuche spezifische Pfade
+            for rustdesk_path in rustdesk_paths:
+                if os.path.exists(rustdesk_path):
+                    try:
+                        result = subprocess.run(
+                            [rustdesk_path, '--get-id'],
+                            capture_output=True,
+                            text=True,
+                            timeout=3,
+                            creationflags=subprocess.CREATE_NO_WINDOW if hasattr(subprocess, 'CREATE_NO_WINDOW') else 0
+                        )
+                        if result.returncode == 0 and result.stdout.strip():
+                            return result.stdout.strip()
+                    except subprocess.TimeoutExpired:
+                        continue
 
             return None
 
         except Exception as e:
-            print(f"⚠️  Windows Config Fehler: {e}")
+            print(f"⚠️  Windows Command Fehler: {e}")
             return None
 
     def _get_rustdesk_id_linux(self) -> Optional[str]:
         """
-        Liest RustDesk ID aus Linux Config-Datei.
+        Holt RustDesk ID über rustdesk --get-id Befehl (Linux).
 
         Returns:
             RustDesk ID oder None
         """
         try:
-            home = os.path.expanduser('~')
-            config_paths = [
-                os.path.join(home, '.config', 'rustdesk', 'RustDesk2.toml'),
-                os.path.join(home, '.config', 'rustdesk', 'RustDesk.toml'),
-            ]
-
-            for config_path in config_paths:
-                if os.path.exists(config_path):
-                    with open(config_path, 'r', encoding='utf-8') as f:
-                        for line in f:
-                            # Suche nach id = "123456789"
-                            if line.strip().startswith('id'):
-                                parts = line.split('=')
-                                if len(parts) == 2:
-                                    rustdesk_id = parts[1].strip().strip('"').strip("'")
-                                    if rustdesk_id:
-                                        return rustdesk_id
+            # Versuche rustdesk Befehl
+            result = subprocess.run(
+                ['rustdesk', '--get-id'],
+                capture_output=True,
+                text=True,
+                timeout=3
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                return result.stdout.strip()
 
             return None
 
         except FileNotFoundError:
-            print("⚠️  RustDesk Config nicht gefunden")
+            print("⚠️  RustDesk nicht im PATH gefunden")
+            return None
+        except subprocess.TimeoutExpired:
+            print("⚠️  RustDesk Befehl Timeout")
             return None
         except Exception as e:
-            print(f"⚠️  Linux Config Fehler: {e}")
+            print(f"⚠️  Linux Command Fehler: {e}")
             return None
 
     def format_value(self, value: Optional[str]) -> str:
