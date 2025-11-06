@@ -1,15 +1,23 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Discord System Monitor Bot - Multi-Device Support
 Überwacht System-Informationen und zeigt sie in einem Discord-Channel an.
 """
 
+import sys
+import os
 import discord
 import json
 import asyncio
 import socket
 from typing import Dict, Optional, List
 from monitors import AVAILABLE_MONITORS
+
+# Fix für Windows Console Encoding (Emojis)
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8')
+    sys.stderr.reconfigure(encoding='utf-8')
 
 
 class MonitorBot(discord.Client):
