@@ -138,6 +138,7 @@ Informer/
 │   ├── __init__.py           # Modul-Registry
 │   ├── base_monitor.py       # Abstract Base Class
 │   ├── teamviewer_monitor.py # TeamViewer ID Monitor
+│   ├── rustdesk_monitor.py   # RustDesk ID Monitor
 │   └── cpu_monitor.py        # CPU Monitor (Beispiel)
 │
 └── docs/                      # Dokumentation
@@ -177,6 +178,15 @@ Informer/
 "teamviewer": {
     "enabled": true,
     "name": "TeamViewer ID",
+    "icon": "🖥️"
+}
+```
+
+**rustdesk** - RustDesk ID anzeigen
+```json
+"rustdesk": {
+    "enabled": true,
+    "name": "RustDesk ID",
     "icon": "🖥️"
 }
 ```

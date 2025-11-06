@@ -9,6 +9,11 @@
             "name": "TeamViewer ID",
             "icon": "🖥️"
         },
+        "rustdesk": {
+            "enabled": false,
+            "name": "RustDesk ID",
+            "icon": "🖥️"
+        },
         "cpu": {
             "enabled": false,
             "name": "CPU Auslastung",
