@@ -132,8 +132,6 @@ Informer/
 ├── config.example.json         # Config-Template
 ├── requirements.txt            # Python Dependencies
 ├── start_bot.bat              # Windows Schnellstart
-├── upload_to_github.bat       # GitHub Upload (Windows)
-├── upload_to_github.sh        # GitHub Upload (Linux/Mac)
 ├── LICENSE                    # MIT License
 ├── .gitignore                # Git Ignore Rules
 │
