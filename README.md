@@ -70,16 +70,49 @@ cp config.example.json config.json
 }
 ```
 
-#### Discord Bot Token erhalten:
-1. Gehe zu [Discord Developer Portal](https://discord.com/developers/applications)
-2. Erstelle eine neue Application
-3. Gehe zu "Bot" → "Add Bot"
-4. Kopiere den Token unter "TOKEN"
-5. Aktiviere "Message Content Intent" unter "Privileged Gateway Intents"
+#### Discord Bot Setup - Schritt für Schritt:
+
+**1. Application erstellen**
+- Gehe zu [Discord Developer Portal](https://discord.com/developers/applications)
+- Klicke **"New Application"**
+- Gib einen Namen ein (z.B. "Informer")
+- Klicke **"Create"**
+
+**2. Bot hinzufügen**
+- Klicke im linken Menü auf **"Bot"**
+- Klicke **"Add Bot"** → **"Yes, do it!"**
+
+**3. Bot Token kopieren**
+- Unter **"TOKEN"** klicke **"Reset Token"**
+- Klicke **"Copy"** und speichere den Token sicher
+- ⚠️ Token wird nur einmal angezeigt!
+
+**4. Privileged Gateway Intents aktivieren** ⚠️ WICHTIG!
+- Scrolle zu **"Privileged Gateway Intents"**
+- Aktiviere: ✅ **Message Content Intent** (ERFORDERLICH!)
+- Klicke **"Save Changes"**
+
+*Ohne Message Content Intent kann der Bot nicht funktionieren!*
+
+**5. Bot-Berechtigungen festlegen**
+- Gehe zu **"OAuth2"** → **"URL Generator"**
+- Scopes: ✅ `bot`
+- Bot Permissions:
+  - ✅ **Send Messages** - Nachrichten senden
+  - ✅ **Embed Links** - Embeds erstellen
+  - ✅ **Read Message History** - Nachrichten lesen (für Embed-Wiederverwendung)
+
+**Minimale Berechtigungen**: `18432` (dezimal) oder `0x4800` (hex)
+
+**6. Bot einladen**
+- Kopiere die generierte URL
+- Öffne URL im Browser
+- Wähle deinen Server
+- Klicke **"Authorize"**
 
 #### Channel ID herausfinden:
-1. Discord Developer Mode aktivieren: Einstellungen → Erweitert → Entwicklermodus
-2. Rechtsklick auf den gewünschten Channel → "ID kopieren"
+1. Discord: **Einstellungen** → **Erweitert** → **Entwicklermodus** aktivieren
+2. Rechtsklick auf Channel → **"ID kopieren"**
 
 ### 5. Bot starten
 
