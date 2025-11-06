@@ -293,51 +293,58 @@ AVAILABLE_MONITORS = {
 
 ## 🐛 Troubleshooting
 
-### Bot startet nicht
+**⚠️ Ausführliche Fehlerbehebung:** Siehe **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)**
 
-```bash
-# Python-Version prüfen (muss 3.8+ sein)
-python --version
+### Häufigste Probleme
 
-# Dependencies prüfen
-pip list | grep discord
+#### 1. Windows Service startet nicht (SERVICE_PAUSED)
 
-# Config prüfen
-cat config.json  # Linux/Mac
-type config.json  # Windows
-```
+**Ursache:** Python ist nur für deinen Benutzer installiert, nicht systemweit.
 
-### TeamViewer ID nicht gefunden
+**Lösung:** Führe `install_service.bat` als Administrator aus und konfiguriere das Service-Konto.
 
-**Windows:**
+Siehe: [TROUBLESHOOTING.md - Service startet nicht](TROUBLESHOOTING.md#service-startet-nicht-service_paused)
+
+#### 2. Discord Connection Fehler (PrivilegedIntentsRequired)
+
+**Ursache:** Message Content Intent nicht aktiviert.
+
+**Lösung:**
+1. https://discord.com/developers/applications/
+2. Bot → Privileged Gateway Intents
+3. ✅ Message Content Intent aktivieren
+
+Siehe: [TROUBLESHOOTING.md - Discord Fehler](TROUBLESHOOTING.md#discord-connection-fehler-privileged-intents)
+
+#### 3. TeamViewer/RustDesk ID nicht gefunden
+
+**TeamViewer (Windows):**
 - Als Administrator starten
-- TeamViewer muss installiert und gestartet sein
+- TeamViewer muss gestartet sein
 
-**Linux:**
-- Config-Datei muss existieren: `/opt/teamviewer/config/global.conf`
+**RustDesk:**
+- RustDesk muss installiert sein
+- Modul in config.json aktivieren
 
-### Embed wird nicht aktualisiert
+Siehe: [TROUBLESHOOTING.md - Monitor zeigt keine Daten](TROUBLESHOOTING.md#3-monitor-zeigt-keine-daten)
 
-- Prüfe Bot-Berechtigungen im Channel:
-  - ✅ Nachrichten senden
-  - ✅ Embed Links
-  - ✅ Nachrichtenverlauf lesen
-- Prüfe Update-Intervall (nicht unter 30 Sekunden)
-- Prüfe Discord Rate Limits (max. 5 Updates/Sekunde)
-
-### Git-Probleme
+### Logs prüfen
 
 ```bash
-# Remote prüfen
-git remote -v
+# Service-Logs (Windows)
+type Z:\Coding\claude\projects\Informer\informer.log
+type Z:\Coding\claude\projects\Informer\informer-error.log
 
-# Remote neu setzen
-git remote remove origin
-git remote add origin https://github.com/Username/Informer.git
+# Service-Status
+nssm status Informer
+
+# Bot manuell testen
+python discord_bot.py
 ```
 
 ## 📚 Weitere Dokumentation
 
+- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Ausführliche Fehlerbehebung und Lösungen
 - **CHANGELOG.md** - Alle Änderungen und Versionen
 - **docs/** - Erweiterte Dokumentation und Guides
 

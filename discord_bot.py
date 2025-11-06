@@ -16,8 +16,13 @@ from monitors import AVAILABLE_MONITORS
 
 # Fix für Windows Console Encoding (Emojis)
 if sys.platform == 'win32':
-    sys.stdout.reconfigure(encoding='utf-8')
-    sys.stderr.reconfigure(encoding='utf-8')
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except (AttributeError, OSError):
+        # Fallback: Wenn reconfigure nicht funktioniert (z.B. als Service)
+        # wird PYTHONIOENCODING in run_bot.bat gesetzt
+        pass
 
 
 class MonitorBot(discord.Client):
