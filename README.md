@@ -131,7 +131,6 @@ Informer/
 ├── discord_bot.py              # Haupt-Bot mit Multi-Device Logic
 ├── config.example.json         # Config-Template
 ├── requirements.txt            # Python Dependencies
-├── start_bot.bat              # Windows Schnellstart
 ├── LICENSE                    # MIT License
 ├── .gitignore                # Git Ignore Rules
 │
