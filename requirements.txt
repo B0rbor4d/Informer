@@ -1,0 +1,9 @@
+# Discord Bot Dependencies
+discord.py>=2.3.2
+
+# Windows-specific (TeamViewer Registry-Zugriff)
+pywin32>=306; sys_platform == 'win32'
+
+# Optional: CPU Monitor
+# Uncomment if you want to use the CPU monitor module
+# psutil>=5.9.0
